@@ -2,6 +2,8 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import csv
+import io
+from PIL import Image
 
 
 url = "https://www.bever.nl/c/uitrusting/tenten.html?size=48&page=0&filter=%2526filter%253Dnl_camping_equipment_type%253A%2528tents%2529"
@@ -36,6 +38,19 @@ with open("bever.csv", "w", newline='', encoding="utf-8") as csvfile:
     for link in links:
         product = requests.get(link)
         soupproduct  = BeautifulSoup(product.text, 'html.parser')
+        
+        print(link)
+        
+        img = "https:" + soupproduct.find(class_="as-m-slide__magnify").find("img").get('src')
+        img_content = requests.get(img).content
+        image_file = io.BytesIO(img_content)
+        image = Image.open(image_file)
+        print(image)
+        file_path = "images/bever/" + img.split("/")[-1] + ".jpeg"
+        print(file_path)
+        with open(file_path, 'wb') as f:
+            image.save(f,"JPEG")
+        # print(img_URL)
         
         name = soupproduct.find(class_="as-a-text as-a-text--title")
         brand = name.parent.text

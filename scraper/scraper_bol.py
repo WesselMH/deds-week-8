@@ -55,7 +55,7 @@ with open("bol.csv", "w", newline='', encoding="utf-8") as csvfile:
         img_content = requests.get(img).content
         image_file = io.BytesIO(img_content)
         image = Image.open(image_file)
-        print(image)
+        print(img)
         file_path = "images/bol/" + img.split("/")[-2] + ".jpeg"
         # print(file_path)
         with open(file_path, 'wb') as f:
